@@ -1,0 +1,3 @@
+<jboss-web>
+    <context-root>jwt-user-service</context-root>
+</jboss-web>
