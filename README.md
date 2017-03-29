@@ -8,6 +8,7 @@ Wildfly 10 - https://wildfly.org/downloads/
 Maven - https://maven.apache.org/  
 JWT debugger - https://jwt.io/#debugger-io
 
+Kopieer alvast de docs/jwt.properties naar de wildfly/standalone/configuration/ zodat deze gebruikt kan worden door de jsf client.
 
 Opdrachten
 ----------
