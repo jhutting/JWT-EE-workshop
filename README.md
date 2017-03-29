@@ -10,6 +10,8 @@ JWT debugger - https://jwt.io/#debugger-io
 
 Kopieer alvast de docs/jwt.properties naar de wildfly/standalone/configuration/ zodat deze gebruikt kan worden door de jsf client.
 
+De database wordt straks aangemaakt in je home directory/users.h2.db het initiele script is te vinden onder docs/scripts/create-db.sql
+
 Opdrachten
 ----------
 
