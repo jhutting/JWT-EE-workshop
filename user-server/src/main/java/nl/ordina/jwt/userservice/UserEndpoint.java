@@ -34,8 +34,8 @@ public class UserEndpoint implements UserApi {
 	}
 
 	@Override
-	public Response update(final User user) {
-		userFacade.updateUser(user);
+	public Response update(final long id, final User user) {
+		userFacade.updateUser(id, user);
 		return Response.noContent().build();
 	}
 }

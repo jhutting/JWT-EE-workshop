@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.ordina.jwt</groupId>
-    <artifactId>rest-shared</artifactId>
+    <artifactId>test-rest</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>JWT shared REST implementation</name>
+    <name>JWT REST testcases</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -16,26 +16,30 @@
     <dependencies>
         <dependency>
             <groupId>nl.ordina.jwt</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>user-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>nl.ordina.jwt</groupId>
-            <artifactId>validation</artifactId>
+            <artifactId>jwt-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
-            <scope>provided</scope>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.11.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>3.0.11.Final</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

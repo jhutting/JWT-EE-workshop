@@ -12,5 +12,5 @@ public interface UserFacade {
 
 	void createUser(final User user);
 
-	void updateUser(final User user);
+	void updateUser(final long id, final User user);
 }

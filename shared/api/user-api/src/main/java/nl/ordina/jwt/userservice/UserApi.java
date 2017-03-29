@@ -1,5 +1,7 @@
 package nl.ordina.jwt.userservice;
 
+import nl.ordina.jwt.Secured;
+import nl.ordina.jwt.model.Role;
 import nl.ordina.jwt.model.User;
 
 import javax.ws.rs.Consumes;
@@ -19,17 +21,21 @@ public interface UserApi {
 
 	@Path("/{id}")
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	Response get(@PathParam("id") final Long id);
 
 	@Path("/create")
 	@PUT
+	@Secured({Role.ADMIN, Role.CONTROLLER})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	Response add(final User user);
 
+	@Path("/{id}")
 	@PUT
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	Response update(final User user);
+	Response update(@PathParam(value = "id") final long id, final User user);
 }
