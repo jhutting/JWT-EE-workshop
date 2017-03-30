@@ -33,8 +33,8 @@ public class TokenEndpoint implements JWTApi {
 	@Override
 	public Response createToken(final Credentials credentials) {
 		Token token = tokenModule.createToken(credentials);
-		NewCookie cookie = new NewCookie("JWT", token.getJwtToken(), "", "localhost", "Secure JWT cookie", -1, true, true);
-		NewCookie xsrfCookie = new NewCookie("XSRF-TOKEN", token.getXsrf(), "", "localhost", "XSRF-TOKEN", -1, true, false);
+		NewCookie cookie = new NewCookie("JWT", token.getJwtToken(), "/", "localhost", "Secure JWT cookie", -1, true, true);
+		NewCookie xsrfCookie = new NewCookie("XSRF-TOKEN", token.getXsrf(), "/", "localhost", "XSRF-TOKEN", -1, true, false);
 		return Response.ok(token.getJwtToken()).cookie(cookie).cookie(xsrfCookie).build();
 	}
 
