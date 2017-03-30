@@ -7,8 +7,11 @@ import nl.ordina.jwt.dao.UserEntity;
 import nl.ordina.jwt.dao.UserRepository;
 import nl.ordina.jwt.facade.TokenModule;
 import nl.ordina.jwt.model.Credentials;
+import nl.ordina.jwt.model.Role;
+import nl.ordina.jwt.model.SaltedValue;
 import nl.ordina.jwt.model.Token;
 import nl.ordina.jwt.model.User;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -18,7 +21,9 @@ import java.nio.file.Files;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.UUID;
 
 /**
@@ -27,7 +32,12 @@ import java.util.UUID;
 @Stateless
 public class TokenModuleImpl implements TokenModule {
 
+	private static final int ONE_MINUTE = 60 * 1000;
+	private static final int ONE_HOUR = 60 * ONE_MINUTE;
+
 	private UserRepository userRepository;
+
+	private EnumMap<Role, Integer> expirationInMSbyRole;
 
 	public TokenModuleImpl() {
 		// Damn you, CDI-spec.
@@ -36,6 +46,11 @@ public class TokenModuleImpl implements TokenModule {
 	@Inject
 	public TokenModuleImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
+
+		expirationInMSbyRole = new EnumMap<>(Role.class);
+		expirationInMSbyRole.put(Role.NORMAL, 9 * ONE_HOUR);
+		expirationInMSbyRole.put(Role.CONTROLLER, ONE_HOUR);
+		expirationInMSbyRole.put(Role.ADMIN, 30 * ONE_MINUTE);
 	}
 
 	@Override
@@ -47,8 +62,10 @@ public class TokenModuleImpl implements TokenModule {
 			String xsrf = generateXSRFToken();
 			String jwtToken = JWT.create()
 					.withIssuer("Ordina")
+					.withClaim("Role", user.getRole().name())
 					.withClaim("XSRF", xsrf)
 					.withIssuedAt(new Date())
+					.withExpiresAt(getExpirationDate(user.getRole()))
 					.withSubject("credentials")
 					.withAudience("myApp-users")
 					.withJWTId(String.valueOf(user.getId()))
@@ -64,6 +81,22 @@ public class TokenModuleImpl implements TokenModule {
 		}
 	}
 
+	@Override
+	public void changePassword(User user) {
+		if (!user.getNewPassword().equals(user.getRepeatedPassword())) {
+			throw new IllegalArgumentException("passwords not identical");
+		}
+
+		String databaseSalt = getSalt();
+		String compareSalt = databaseSalt + getLocalSalt();
+		String saltedPassword = new String(hash(user.getNewPassword(), compareSalt));
+
+		UserEntity change = userRepository.findByUsername(user.getUsername());
+		change.setResetToken(null);
+		change.setSalt(databaseSalt);
+		change.setSaltedPassword(saltedPassword);
+	}
+
 	private RSAPrivateKey getRSAPrivateKey() throws Exception {
 		byte[] keyBytes = Files.readAllBytes(new File("/opt/keys/private_key.der").toPath());
 		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
@@ -76,15 +109,42 @@ public class TokenModuleImpl implements TokenModule {
 		if (user == null) {
 			throw new NotAuthorizedException("Unknown user");
 		}
-		checkPassword(credentials.getPassword(), user.getSaltedPassword());
+		checkPassword(credentials.getPassword(), new SaltedValue(user.getSaltedPassword(), user.getSalt()));
 
 		return UserConverter.convertEntity(user);
 	}
 
-	private void checkPassword(final String suppliedPassword, final String saltedValue) {
-		if (!suppliedPassword.equals(saltedValue)) {
+	private void checkPassword(final String suppliedPassword, final SaltedValue saltedValue) {
+		String compareSalt = saltedValue.getSalt() + getLocalSalt();
+		if (!equalsPassword(suppliedPassword, compareSalt, saltedValue.getValue())) {
 			throw new NotAuthorizedException("wrong password");
 		}
+	}
+
+	private String getSalt() {
+		throw new NotImplementedException();
+	}
+
+	private String getLocalSalt() {
+		// TODO read this from an environment specific (properties?) file
+		return "LocallyStoredSaltToPreventTargettingSpecificUsers";
+	}
+
+	private byte[] hash(String password, String salt) {
+		//TODO zie https://www.owasp.org/index.php/Hashing_Java
+		throw new NotImplementedException();
+	}
+
+	private boolean equalsPassword(String password, String salt, String expectedHash) {
+		String pwdHash = new String(hash(password, salt));
+
+		return pwdHash.equals(expectedHash);
+	}
+
+	private Date getExpirationDate(Role role) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MILLISECOND, expirationInMSbyRole.get(role));
+		return cal.getTime();
 	}
 
 	private String generateXSRFToken() {

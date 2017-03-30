@@ -24,7 +24,7 @@ We beginnen met een simpele opdracht: check de code uit via Git
 Genereer een eigen private/public key en laadt deze in om je JWT te beveiligen. Zie docs/create_keys.txt om de keys te genereren.  
 (Als alternatief kun je ook de meegeleverde private_key.der en public_key.der uit de docs/ map gebruiken)
 
-De implementatatie hiervan vind je in de TokenModuleImpl  
+De implementatie hiervan vind je in de TokenModuleImpl  
 
 Stel bij het teruggeven van de token voor de beheerder/admin rol een kortere looptijd in.
 
