@@ -9,4 +9,6 @@ import org.springframework.data.repository.cdi.Eager;
 @Eager
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	UserEntity findByUsername(String username);
+
+	UserEntity findByEmail(String email);
 }

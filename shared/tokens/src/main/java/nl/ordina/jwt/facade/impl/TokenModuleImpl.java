@@ -11,19 +11,29 @@ import nl.ordina.jwt.model.Role;
 import nl.ordina.jwt.model.SaltedValue;
 import nl.ordina.jwt.model.Token;
 import nl.ordina.jwt.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.NotAuthorizedException;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -31,6 +41,11 @@ import java.util.UUID;
  */
 @Stateless
 public class TokenModuleImpl implements TokenModule {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TokenModuleImpl.class);
+
+	private static final int ITERATIONS = 1024;
+	private static final int KEY_LENGTH = 256;
 
 	private static final int ONE_MINUTE = 60 * 1000;
 	private static final int ONE_HOUR = 60 * ONE_MINUTE;
@@ -97,6 +112,14 @@ public class TokenModuleImpl implements TokenModule {
 		change.setSaltedPassword(saltedPassword);
 	}
 
+	@Override
+	public void mailResetToken(String email) {
+		// TODO
+		throw new NotImplementedException();
+		// since we can't email in this workshop - just print it to the log
+		//LOGGER.info("resettoken {} for email {}", token, email);
+	}
+
 	private RSAPrivateKey getRSAPrivateKey() throws Exception {
 		byte[] keyBytes = Files.readAllBytes(new File("/opt/keys/private_key.der").toPath());
 		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
@@ -122,7 +145,10 @@ public class TokenModuleImpl implements TokenModule {
 	}
 
 	private String getSalt() {
-		throw new NotImplementedException();
+		final Random r = new SecureRandom();
+		byte[] salt = new byte[32];
+		r.nextBytes(salt);
+		return Base64.getEncoder().encodeToString(salt);
 	}
 
 	private String getLocalSalt() {
@@ -130,9 +156,20 @@ public class TokenModuleImpl implements TokenModule {
 		return "LocallyStoredSaltToPreventTargettingSpecificUsers";
 	}
 
+	// derived from https://www.owasp.org/index.php/Hashing_Java
 	private byte[] hash(String password, String salt) {
-		//TODO zie https://www.owasp.org/index.php/Hashing_Java
-		throw new NotImplementedException();
+		PBEKeySpec spec = new PBEKeySpec(password.toCharArray(),
+				salt.getBytes(StandardCharsets.UTF_8),
+				ITERATIONS,
+				KEY_LENGTH);
+		try {
+			SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+			return skf.generateSecret(spec).getEncoded();
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
+		} finally {
+			spec.clearPassword();
+		}
 	}
 
 	private boolean equalsPassword(String password, String salt, String expectedHash) {

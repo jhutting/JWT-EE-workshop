@@ -9,4 +9,5 @@ public interface TokenModule {
 
 	void changePassword(User user);
 
+	void mailResetToken(String email);
 }

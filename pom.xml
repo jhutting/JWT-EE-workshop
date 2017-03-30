@@ -14,6 +14,7 @@
         <module>shared/api/jwt-api</module>
         <module>shared/users-and-roles</module>
         <module>shared/tokens</module>
+        <module>shared/validation</module>
         <module>user-server</module>
         <module>sso-server</module>
     </modules>
