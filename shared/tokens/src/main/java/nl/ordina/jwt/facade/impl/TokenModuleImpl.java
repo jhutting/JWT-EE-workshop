@@ -13,7 +13,6 @@ import nl.ordina.jwt.model.Token;
 import nl.ordina.jwt.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -114,10 +113,14 @@ public class TokenModuleImpl implements TokenModule {
 
 	@Override
 	public void mailResetToken(String email) {
-		// TODO
-		throw new NotImplementedException();
+		String token = UUID.randomUUID().toString();
+		UserEntity user = userRepository.findByEmail(email);
+		if (user == null) {
+			throw new NotAuthorizedException("no user for this email");
+		}
+		user.setResetToken(token);
 		// since we can't email in this workshop - just print it to the log
-		//LOGGER.info("resettoken {} for email {}", token, email);
+		LOGGER.info("resettoken {} for email {}", token, email);
 	}
 
 	private RSAPrivateKey getRSAPrivateKey() throws Exception {
