@@ -1,5 +1,7 @@
 package nl.ordina.jwt.userservice;
 
+import nl.ordina.jwt.AuthorizationFilter;
+import nl.ordina.jwt.exception.NotAuthorizedExceptionHandler;
 import nl.ordina.jwt.exception.NotFoundExceptionHandler;
 
 import javax.ws.rs.core.Application;
@@ -16,6 +18,8 @@ public class UserApplication extends Application {
 	public Set<Class<?>> getClasses() {
 		return new HashSet<>(Arrays.asList(UserEndpoint.class,
 
-				NotFoundExceptionHandler.class));
+				AuthorizationFilter.class,
+
+				NotAuthorizedExceptionHandler.class, NotFoundExceptionHandler.class));
 	}
 }

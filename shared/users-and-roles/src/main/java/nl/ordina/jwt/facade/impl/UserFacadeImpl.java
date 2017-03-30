@@ -42,8 +42,8 @@ public class UserFacadeImpl implements UserFacade {
 	}
 
 	@Override
-	public void updateUser(final User user) {
-		UserEntity updateUser = userRepository.findOne(user.getId());
+	public void updateUser(final long id, final User user) {
+		UserEntity updateUser = userRepository.findOne(id);
 		updateUser.setUsername(user.getUsername());
 		updateUser.setEmail(user.getEmail());
 		// updating Role and password are handled by other facades

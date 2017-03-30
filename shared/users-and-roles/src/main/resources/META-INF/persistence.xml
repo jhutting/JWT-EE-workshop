@@ -8,9 +8,9 @@
         <class>nl.ordina.jwt.dao.UserEntity</class>
         <properties>
             <property name="javax.persistence.jdbc.driver"      value="org.h2.jdbcx.JdbcDataSource" />
-            <!--<property name="javax.persistence.jdbc.url"         value="jdbc:h2:~/users" />-->
-            <!--<property name="javax.persistence.jdbc.user"        value="sa" />-->
-            <!--<property name="javax.persistence.jdbc.password"    value="" />-->
+            <property name="javax.persistence.jdbc.url"         value="jdbc:h2:~/users" />
+            <property name="javax.persistence.jdbc.user"        value="sa" />
+            <property name="javax.persistence.jdbc.password"    value="" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
             <property name="hibernate.max_fetch_depth" value="3" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
