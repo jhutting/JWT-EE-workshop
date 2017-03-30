@@ -12,6 +12,12 @@ Kopieer alvast de docs/jwt.properties naar de wildfly/standalone/configuration/ 
 
 De database wordt straks aangemaakt in je home directory/users.h2.db het initiele script is te vinden onder docs/scripts/create-db.sql
 
+Datasource in wildfly onder Subsystems    Subsystem: Datasources    Type: Non-XA    Datasource: jwt-users Back | :
+JNDI:java:/jwt-users
+Driver:h2
+
+onder connection: Connection URL: jdbc:h2:~/users
+
 Opdrachten
 ----------
 
