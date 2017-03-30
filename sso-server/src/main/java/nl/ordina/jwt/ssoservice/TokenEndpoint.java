@@ -63,6 +63,9 @@ public class TokenEndpoint implements JWTApi {
 	}
 
 	private void validateResetToken(User user) {
-		// TODO implementeer hier je verificatie op reset token
+		User storedUser = userFacade.getByUsername(user.getUsername());
+		if (storedUser == null || !user.getResetToken().equals(storedUser.getResetToken())) {
+			throw new NotAuthorizedException("update not allowed");
+		}
 	}
 }

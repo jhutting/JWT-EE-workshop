@@ -1,5 +1,6 @@
 package nl.ordina.jwt.userservice;
 
+import nl.ordina.jwt.Secured;
 import nl.ordina.jwt.model.User;
 
 import javax.ws.rs.Consumes;
@@ -19,6 +20,7 @@ public interface UserApi {
 
 	@Path("/{id}")
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	Response get(@PathParam("id") final Long id);
 
