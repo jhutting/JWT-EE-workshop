@@ -9,9 +9,13 @@
 
     <modules>
         <module>shared/model</module>
+        <module>shared/validation</module>
         <module>shared/rest-shared</module>
+        <module>shared/api/jwt-api</module>
         <module>shared/api/user-api</module>
         <module>shared/users-and-roles</module>
+        <module>shared/tokens</module>
+        <module>sso-server</module>
         <module>user-server</module>
     </modules>
 </project>
