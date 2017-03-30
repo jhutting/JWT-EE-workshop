@@ -11,7 +11,10 @@
         <module>shared/model</module>
         <module>shared/rest-shared</module>
         <module>shared/api/user-api</module>
+        <module>shared/api/jwt-api</module>
         <module>shared/users-and-roles</module>
+        <module>shared/tokens</module>
         <module>user-server</module>
+        <module>sso-server</module>
     </modules>
 </project>
