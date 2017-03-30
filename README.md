@@ -18,7 +18,7 @@ Opdrachten
 ### Opdracht 0 - Kale REST applicatie zonder beveiliging
 We beginnen met een simpele opdracht: check de code uit via Git
 * Bouw de applicatie en deploy deze op je lokaal draaiende Wildfly instantie.
-* Schiet een paar REST berichten in om gegevens op te vragen en muteren.
+* Schiet een paar REST berichten in om gegevens op te vragen en muteren. (bijvoorbeeld met POSTMAN of intellij)
 
 ### Opdracht 1 - Private/public key pair genereren, instellen en JWT genereren
 Genereer een eigen private/public key en laadt deze in om je JWT te beveiligen. Zie docs/create_keys.txt om de keys te genereren.  
