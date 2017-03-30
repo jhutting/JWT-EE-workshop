@@ -26,6 +26,8 @@ We beginnen met een simpele opdracht: check de code uit via Git
 * Bouw de applicatie en deploy deze op je lokaal draaiende Wildfly instantie.
 * Schiet een paar REST berichten in om gegevens op te vragen en muteren. (bijvoorbeeld met POSTMAN of intellij)
 
+Aanroep: http://localhost:8080jwt-user-service/user/4  
+
 ### Opdracht 1 - Private/public key pair genereren, instellen en JWT genereren
 Genereer een eigen private/public key en laadt deze in om je JWT te beveiligen. Zie docs/create_keys.txt om de keys te genereren.  
 (Als alternatief kun je ook de meegeleverde private_key.der en public_key.der uit de docs/ map gebruiken)
