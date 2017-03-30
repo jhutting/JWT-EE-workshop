@@ -5,6 +5,7 @@ import nl.ordina.jwt.facade.TokenModule;
 import nl.ordina.jwt.facade.UserFacade;
 import nl.ordina.jwt.model.Credentials;
 import nl.ordina.jwt.model.Token;
+import nl.ordina.jwt.model.User;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.NewCookie;
@@ -31,4 +32,9 @@ public class TokenEndpoint implements JWTApi {
 		return Response.ok(token.getJwtToken()).cookie(cookie).cookie(xsrfCookie).build();
 	}
 
+	@Override
+	public Response updatePassword(final User user) {
+		tokenModule.changePassword(user);
+		return Response.noContent().build();
+	}
 }
