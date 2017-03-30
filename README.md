@@ -31,7 +31,7 @@ Zie https://www.owasp.org/index.php/Hashing_Java voor een voorbeeld.
 N.B. PBKDF2WithHmacSHA512 is veilig, maar heeft JDK8 of hoger nodig
 
 ### Opdracht 3 - Two-factor authentication, reset wachtwoord via email
-Je hebt nu wel een user met een wachtwoord, maar die moet natuurlijk wel gehashed worden in het geval onze database uitlekt.  
+Je hebt nu een werkende login module, maar wat als je gebruiker zijn wachtwoord niet meer weet?  
 Zorg ervoor dat de gebruiker via zijn mailadres een token krijgt waarmee hij/zij het wachtwoord kan wijzigen.
 
 Tip: wegschrijven in de log mag ook. Ga geen hele mailserver optuigen!
